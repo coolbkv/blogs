@@ -3,68 +3,46 @@
 <head>
     <title>News</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            align-items: flex-start;
-        }
-
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            width: 100%;
-        }
-
         nav ul {
-            list-style: none;
+            list-style-type: none;
             margin: 0;
             padding: 0;
-            display: inline-block;
+            overflow: hidden;
+            background-color: #333;
         }
 
         nav li {
-            display: inline;
-            margin: 0 15px;
+            float: left;
         }
 
-        nav a {
+        nav li a {
+            display: block;
             color: white;
+            text-align: center;
+            padding: 14px 16px;
             text-decoration: none;
-            font-weight: bold;
-            padding: 5px 10px;
         }
 
-        nav a:hover {
-            background-color: #555;
-            border-radius: 5px;
+        nav li a:hover {
+            background-color: #111;
         }
 
         .main-content {
-            padding: 20px;
-            width: 100%;
-            text-align: center; /* Center the iframe */
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
         }
 
         footer {
-            text-align: left;
-            padding: 10px 20px;
-            width: 100%;
-        }
-
-        iframe {
-            max-width: 100%; /* Make iframe responsive */
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
-<body>
+<body class="w3-container">
 
     <header>
         <nav>
@@ -78,7 +56,7 @@
     </header>
 
     <div class="main-content">
-        <iframe width="600" height="700" src="https://rss.app/embed/v1/feed/NFyqjmCQNtwQjtSE" frameborder="0"></iframe>
+        <iframe class="w3-card-4" width="80%" height="700" src="https://rss.app/embed/v1/feed/NFyqjmCQNtwQjtSE" frameborder="0"></iframe>
     </div>
 
     <footer>
