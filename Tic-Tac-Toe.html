@@ -2,174 +2,188 @@
 <html>
 <head>
 <title>Tic-Tac-Toe</title>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="styles.css">
+<style>
+  #board {
+    width: 90vw; /* Responsive width */
+    max-width: 400px; /* Maximum size */
+    height: 90vw; /* Make it square */
+    max-height: 400px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    margin: 20px auto; /* Center the board */
+  }
+
+  .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4em;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    box-sizing: border-box; /* Include border in width/height */
+  }
+
+  /* Responsive font size */
+  h2 {
+    font-size: 2em;
+  }
+
+  p {
+    font-size: 1.2em;
+  }
+</style>
 </head>
-<body class="w3-display-container w3-content w3-center">
+<body class="w3-container w3-center">
 
-<p><a href="index.html" class="w3-button w3-blue">Home</a></p>
+<h2>Tic-Tac-Toe</h2>
 
-<div class="mode-select w3-margin-bottom">
-  <label class="w3-margin-right"><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
-  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
+<div id="board">
+  <div class="cell" data-row="0" data-col="0" onclick="makeMove(0, 0)"></div>
+  <div class="cell" data-row="0" data-col="1" onclick="makeMove(0, 1)"></div>
+  <div class="cell" data-row="0" data-col="2" onclick="makeMove(0, 2)"></div>
+  <div class="cell" data-row="1" data-col="0" onclick="makeMove(1, 0)"></div>
+  <div class="cell" data-row="1" data-col="1" onclick="makeMove(1, 1)"></div>
+  <div class="cell" data-row="1" data-col="2" onclick="makeMove(1, 2)"></div>
+  <div class="cell" data-row="2" data-col="0" onclick="makeMove(2, 0)"></div>
+  <div class="cell" data-row="2" data-col="1" onclick="makeMove(2, 1)"></div>
+  <div class="cell" data-row="2" data-col="2" onclick="makeMove(2, 2)"></div>
 </div>
 
-<div class="w3-center">
-  <div class="w3-container" id="board" style="display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px; width: 315px; margin: 20px auto;">
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="0" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="1" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="2" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="3" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="4" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="5" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="6" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="7" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-    <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="8" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  </div>
-</div>
+<p id="message"></p>
+<button class="w3-button w3-blue" onclick="resetGame()">Reset Game</button>
 
-<div id="message" class="w3-center w3-large w3-margin-top"></div>
-<button onclick="resetGame()" class="w3-button w3-green w3-margin-top">Reset Game</button>
 <script>
-  const cells = document.querySelectorAll('.cell');
-  const message = document.getElementById('message');
-  const modeRadios = document.querySelectorAll('input[name="mode"]');
-  let board = ['', '', '', '', '', '', '', '', ''];
-  let player = 'X';
-  let currentPlayer = player;
-  let computer = 'O';
-  let gameActive = true;
-  let playWithComputer = true;
-  modeRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      playWithComputer = radio.value === 'computer';
-      resetGame();
-    });
-  });
-  function handleCellClick(e) {
-    const cell = e.target;
-    const index = parseInt(cell.dataset.index);
-    if (board[index] === '' && gameActive) {
-      board[index] = currentPlayer;
-      cell.textContent = currentPlayer;
-      cell.classList.add(currentPlayer);
-      if (checkWin(currentPlayer)) {
-        message.textContent = `${currentPlayer} wins!`;
-        gameActive = false;
-      } else if (isBoardFull()) {
-        message.textContent = "It's a draw!";
-        gameActive = false;
-      } else {
-        if (playWithComputer && currentPlayer === player) {
-          computerMove();
-        } else {
-          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-          message.textContent = `Player ${currentPlayer}'s turn`;
-        }
-      }
-    }
-  }
-  function computerMove() {
-    if (!gameActive) return;
-    let bestMove = getBestMove(board, computer);
-    board[bestMove] = computer;
-    cells[bestMove].textContent = computer;
-    cells[bestMove].classList.add(computer);
-    if (checkWin(computer)) {
-      message.textContent = `${computer} wins!`;
-      gameActive = false;
-    } else if (isBoardFull()) {
-      message.textContent = "It's a draw!";
-      gameActive = false;
-    } else {
-      currentPlayer = player;
-      message.textContent = `Your turn`;
-    }
-  }
-  function getBestMove(currentBoard, currentPlayer) {
-    // ... (Minimax algorithm code from previous responses) ...
-    let availableMoves = [];
-    for (let i = 0; i < currentBoard.length; i++) {
-      if (currentBoard[i] === '') {
-        availableMoves.push(i);
-      }
-    }
-    let bestMove = -1;
-    let bestScore = -Infinity;
-    for (let i = 0; i < availableMoves.length; i++) {
-      let tempBoard = [...currentBoard];
-      tempBoard[availableMoves[i]] = currentPlayer;
-      let score = minimax(tempBoard, 0, false);
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = availableMoves[i];
-      }
-    }
-    return bestMove;
-  }
-  function minimax(currentBoard, depth, isMaximizing) {
-    // ... (Minimax algorithm code from previous responses) ...
-    if (checkWin(player, currentBoard)) return -1;
-    if (checkWin(computer, currentBoard)) return 1;
-    if (isBoardFull(currentBoard)) return 0;
-    if (isMaximizing) {
-      let bestScore = -Infinity;
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[i] === '') {
-          let tempBoard = [...currentBoard];
-          tempBoard[i] = computer;
-          let score = minimax(tempBoard, depth + 1, false);
-          bestScore = Math.max(score, bestScore);
-        }
-      }
-      return bestScore;
-    } else {
-      let bestScore = Infinity;
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[i] === '') {
-          let tempBoard = [...currentBoard];
-          tempBoard[i] = player;
-          let score = minimax(tempBoard, depth + 1, true);
-          bestScore = Math.min(score, bestScore);
-        }
-      }
-      return bestScore;
-    }
-  }
-  function checkWin(symbol, currentBoard = board) {
-    // ... (Win check code from previous responses) ...
-    const winPatterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-    return winPatterns.some(pattern => {
-      const [a, b, c] = pattern;
-      return currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c] && currentBoard[a] === symbol;
-    });
-  }
-  function isBoardFull(currentBoard = board) {
-    // ... (Board full check code from previous responses) ...
-    return currentBoard.every(cell => cell !== '');
-  }
-  function resetGame() {
-    board = ['', '', '', '', '', '', '', '', ''];
-    currentPlayer = player;
-    gameActive = true;
-    message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
-    cells.forEach(cell => {
-      cell.textContent = '';
-      cell.classList.remove(player, computer);
-    });
-  }
-  cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-  message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
+  let board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
+  let player = "X";
+  let computer = "O";
+  let gameOver = false;
+
+  // ... (rest of the JavaScript code from previous example) ...
+  function makeMove(row, col) {
+    if (gameOver || board[row][col] !== " ") return;
+
+    board[row][col] = player;
+    getCell(row, col).textContent = player;
+
+    if (checkWinner(player)) {
+      document.getElementById("message").textContent = "You win!";
+      gameOver = true;
+      return;
+    }
+
+    if (isBoardFull()) {
+      document.getElementById("message").textContent = "It's a tie!";
+      gameOver = true;
+      return;
+    }
+
+    computerMove();
+  }
+
+  function computerMove() {
+    if (gameOver) return;
+    let bestMove = getBestMove(board);
+    if (bestMove) {
+      board[bestMove.row][bestMove.col] = computer;
+      getCell(bestMove.row, bestMove.col).textContent = computer;
+
+      if (checkWinner(computer)) {
+        document.getElementById("message").textContent = "Computer wins!";
+        gameOver = true;
+        return;
+      }
+
+      if (isBoardFull()) {
+        document.getElementById("message").textContent = "It's a tie!";
+        gameOver = true;
+        return;
+      }
+    }
+  }
+
+  function getCell(row, col) {
+    return document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  }
+
+  function checkWinner(player) {
+    for (let i = 0; i < 3; i++) {
+      if (board[i][0] === player && board[i][1] === player && board[i][2] === player) return true;
+      if (board[0][i] === player && board[1][i] === player && board[2][i] === player) return true;
+    }
+    if (board[0][0] === player && board[1][1] === player && board[2][2] === player) return true;
+    if (board[0][2] === player && board[1][1] === player && board[2][0] === player) return true;
+    return false;
+  }
+
+  function isBoardFull() {
+    for (let row of board) {
+      if (row.includes(" ")) return false;
+    }
+    return true;
+  }
+
+  function getEmptyCells(board) {
+    let emptyCells = [];
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (board[row][col] === " ") {
+          emptyCells.push({ row, col });
+        }
+      }
+    }
+    return emptyCells;
+  }
+
+  function minimax(board, depth, maximizingPlayer) {
+    if (checkWinner("X")) return -1;
+    if (checkWinner("O")) return 1;
+    if (isBoardFull()) return 0;
+
+    if (maximizingPlayer) {
+      let maxEval = -Infinity;
+      for (let move of getEmptyCells(board)) {
+        board[move.row][move.col] = "O";
+        let eval = minimax(board, depth + 1, false);
+        board[move.row][move.col] = " ";
+        maxEval = Math.max(maxEval, eval);
+      }
+      return maxEval;
+    } else {
+      let minEval = Infinity;
+      for (let move of getEmptyCells(board)) {
+        board[move.row][move.col] = "X";
+        let eval = minimax(board, depth + 1, true);
+        board[move.row][move.col] = " ";
+        minEval = Math.min(minEval, eval);
+      }
+      return minEval;
+    }
+  }
+
+  function getBestMove(board) {
+    let bestMove;
+    let bestEval = -Infinity;
+    for (let move of getEmptyCells(board)) {
+      board[move.row][move.col] = "O";
+      let eval = minimax(board, 0, false);
+      board[move.row][move.col] = " ";
+      if (eval > bestEval) {
+        bestEval = eval;
+        bestMove = move;
+      }
+    }
+    return bestMove;
+  }
+
+  function resetGame() {
+    board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]];
+    gameOver = false;
+    document.getElementById("message").textContent = "";
+    document.querySelectorAll(".cell").forEach(cell => cell.textContent = "");
+  }
 </script>
-<footer>
-    &copy; <span id="copyrightYear"></span> Brajesh Kumar
-</footer>
-<script>
-    document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
- </script>
 </body>
 </html>
