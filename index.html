@@ -12,47 +12,48 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    align-items: flex-start; /* Left align all items */
   }
 
   h3 {
-    text-align: center;
+    text-align: left; /* Left align h3 */
     margin-bottom: 20px;
   }
 
   p {
-    text-align: center;
+    text-align: left; /* Left align p */
     margin: 10px 0;
   }
 
   a {
-    display: block;
+    display: inline-block; /* Change to inline-block */
     padding: 15px 20px;
-    background-color: #007bff; /* Example button color */
+    background-color: #007bff;
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    text-align: center;
-    margin: 10px auto;
-    width: fit-content; /* Make the button only as wide as its content */
+    margin: 10px 0; /* Remove auto margin */
   }
 
   a:hover {
-    background-color: #0056b3; /* Darker color on hover */
+    background-color: #0056b3;
   }
 
+  footer {
+    text-align: left; /* Left align footer */
+    padding: 10px 0; /* Adjust footer padding */
+  }
 </style>
 </head>
 <body>
   <h3>Links to play classic games:</h3>
   <p><a href="Tic-Tac-Toe.html">Tic-Tac-Toe</a></p>
-
   <p>More Classic Games will be added soon...</p>
-
-<footer>
+  <footer>
     &copy; <span id="copyrightYear"></span> Brajesh Kumar
-</footer>
-<script>
+  </footer>
+  <script>
     document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
- </script>
+  </script>
 </body>
 </html>
