@@ -3,7 +3,7 @@
 <head>
     <title>News</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         nav ul {
             list-style-type: none;
@@ -40,6 +40,23 @@
             padding: 10px;
             background-color: #f0f0f0;
         }
+
+        /* Media query for mobile devices */
+        @media (max-width: 600px) {
+            .main-content iframe {
+                width: 100%; /* Make iframe take full width on mobile */
+                height: 800px; /* Adjust height for mobile */
+            }
+        }
+
+        /* Media query for tablet and desktop devices */
+        @media (min-width: 601px) {
+          .main-content iframe {
+                width: 80%;
+                height: 1600px;
+          }
+        }
+
     </style>
 </head>
 <body class="w3-container">
@@ -56,7 +73,7 @@
     </header>
 
     <div class="main-content">
-        <iframe class="w3-card-4" width="80%" height="700" src="https://rss.app/embed/v1/feed/NFyqjmCQNtwQjtSE" frameborder="0"></iframe>
+        <iframe class="w3-card-4" src="https://rss.app/embed/v1/wall/NFyqjmCQNtwQjtSE" width="900" height="1600" frameborder="0"></iframe>
     </div>
 
     <footer>
