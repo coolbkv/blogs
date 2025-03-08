@@ -12,6 +12,8 @@
     justify-content: center;
     min-height: 100vh;
     margin: 0;
+    padding: 10px; /* Added padding to the body */
+    box-sizing: border-box; /* Include padding in width/height */
   }
   .board {
     display: grid;
@@ -19,7 +21,7 @@
     grid-gap: 5px;
     margin: 20px auto;
     width: 315px;
-    max-width: 90%; /* Responsive width */
+    max-width: 90%;
   }
   .cell {
     width: 100px;
@@ -28,7 +30,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3em; /* Increased font size for touch */
+    font-size: 3em;
     cursor: pointer;
   }
   #message {
@@ -39,7 +41,7 @@
   button {
     display: block;
     margin: 10px auto;
-    padding: 10px 20px; /* Larger button for touch */
+    padding: 10px 20px;
     font-size: 1em;
   }
 </style>
