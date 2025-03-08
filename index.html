@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Classic Games</title>
@@ -6,21 +7,22 @@
 </head>
 <body>
     <div id="header-container"></div>
-    
     <div class="w3-container w3-padding-large">
         <h3>Classic Games</h3>
         <p><a href="Tic-Tac-Toe.html" class="w3-button w3-blue">Tic-Tac-Toe</a></p>
         <p><a href="DigitalDice.html" class="w3-button w3-blue">Digital Dice</a></p>
         <p>More Classic Games will be added soon...</p>
     </div>
-
     <footer class="w3-container w3-padding-16">
         &copy; <span id="copyrightYear"></span> Brajesh Kumar
     </footer>
-
     <script>
         document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-container').innerHTML = data;
+            });
     </script>
-
 </body>
 </html>
