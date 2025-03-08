@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic-Tac-Toe (vs. Computer)</title>
+<style>
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+    margin: 20px auto;
+    width: 315px;
+  }
+  .cell {
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+  }
+  #message {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 10px;
+  }
+  button {
+    display: block;
+    margin: 10px auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">
+  <div class="cell" data-index="0"></div>
+  <div class="cell" data-index="1"></div>
+  <div class="cell" data-index="2"></div>
+  <div class="cell" data-index="3"></div>
+  <div class="cell" data-index="4"></div>
+  <div class="cell" data-index="5"></div>
+  <div class="cell" data-index="6"></div>
+  <div class="cell" data-index="7"></div>
+  <div class="cell" data-index="8"></div>
+</div>
+
+<div id="message"></div>
+<button onclick="resetGame()">Reset Game</button>
+
+<script>
+  const cells = document.querySelectorAll('.cell');
+  const message = document.getElementById('message');
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let player = 'X';
+  let computer = 'O';
+  let gameActive = true;
+
+  function handleCellClick(e) {
+    const cell = e.target;
+    const index = parseInt(cell.dataset.index);
+
+    if (board[index] === '' && gameActive) {
+      board[index] = player;
+      cell.textContent = player;
+      cell.classList.add(player);
+
+      if (checkWin(player)) {
+        message.textContent = `${player} wins!`;
+        gameActive = false;
+      } else if (isBoardFull()) {
+        message.textContent = "It's a draw!";
+        gameActive = false;
+      } else {
+        computerMove();
+      }
+    }
+  }
+
+  function computerMove() {
+    if (!gameActive) return;
+
+    let bestMove = getBestMove(board, computer);
+    board[bestMove] = computer;
+    cells[bestMove].textContent = computer;
+    cells[bestMove].classList.add(computer);
+
+    if (checkWin(computer)) {
+      message.textContent = `${computer} wins!`;
+      gameActive = false;
+    } else if (isBoardFull()) {
+      message.textContent = "It's a draw!";
+      gameActive = false;
+    }
+  }
+
+  function getBestMove(currentBoard, currentPlayer) {
+    let availableMoves = [];
+    for (let i = 0; i < currentBoard.length; i++) {
+      if (currentBoard[i] === '') {
+        availableMoves.push(i);
+      }
+    }
+
+    let bestMove = -1;
+    let bestScore = -Infinity;
+
+    for (let i = 0; i < availableMoves.length; i++) {
+      let tempBoard = [...currentBoard];
+      tempBoard[availableMoves[i]] = currentPlayer;
+      let score = minimax(tempBoard, 0, false);
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = availableMoves[i];
+      }
+    }
+
+    return bestMove;
+  }
+
+  function minimax(currentBoard, depth, isMaximizing) {
+    if (checkWin(player, currentBoard)) return -1;
+    if (checkWin(computer, currentBoard)) return 1;
+    if (isBoardFull(currentBoard)) return 0;
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[i] === '') {
+          let tempBoard = [...currentBoard];
+          tempBoard[i] = computer;
+          let score = minimax(tempBoard, depth + 1, false);
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[i] === '') {
+          let tempBoard = [...currentBoard];
+          tempBoard[i] = player;
+          let score = minimax(tempBoard, depth + 1, true);
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  }
+
+  function checkWin(symbol, currentBoard = board) {
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    return winPatterns.some(pattern => {
+      const [a, b, c] = pattern;
+      return currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c] && currentBoard[a] === symbol;
+    });
+  }
+
+  function isBoardFull(currentBoard = board) {
+    return currentBoard.every(cell => cell !== '');
+  }
+
+  function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    gameActive = true;
+    message.textContent = '';
+    cells.forEach(cell => {
+      cell.textContent = '';
+      cell.classList.remove(player, computer);
+    });
+    message.textContent = "Your turn";
+  }
+
+  cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+  message.textContent = "Your turn";
+</script>
+
+</body>
+</html>
