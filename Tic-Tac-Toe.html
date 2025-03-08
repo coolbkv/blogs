@@ -37,7 +37,7 @@
 </style>
 </head>
 <body class="w3-container w3-center">
-
+<div id="header-container"></div>
 <h2>Tic-Tac-Toe</h2>
 
 <div id="board">
@@ -184,6 +184,12 @@
     document.getElementById("message").textContent = "";
     document.querySelectorAll(".cell").forEach(cell => cell.textContent = "");
   }
+      document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
+      fetch('header.html')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('header-container').innerHTML = data;
+          });
 </script>
 </body>
 </html>
