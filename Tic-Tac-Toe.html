@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Tic-Tac-Toe (vs. Computer)</title>
+<title>Tic-Tac-Toe</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
@@ -12,8 +12,8 @@
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-    padding: 10px; /* Added padding to the body */
-    box-sizing: border-box; /* Include padding in width/height */
+    padding: 10px;
+    box-sizing: border-box;
   }
   .board {
     display: grid;
@@ -44,9 +44,22 @@
     padding: 10px 20px;
     font-size: 1em;
   }
+  .mode-select {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .mode-select label {
+    margin: 0 10px;
+  }
 </style>
 </head>
 <body>
+
+<div class="mode-select">
+  <label><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
+  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
+</div>
 
 <div class="board" id="board">
   <div class="cell" data-index="0"></div>
@@ -64,31 +77,45 @@
 <button onclick="resetGame()">Reset Game</button>
 
 <script>
-  // ... (JavaScript code from previous response) ...
   const cells = document.querySelectorAll('.cell');
   const message = document.getElementById('message');
+  const modeRadios = document.querySelectorAll('input[name="mode"]');
   let board = ['', '', '', '', '', '', '', '', ''];
   let player = 'X';
+  let currentPlayer = player;
   let computer = 'O';
   let gameActive = true;
+  let playWithComputer = true;
+
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      playWithComputer = radio.value === 'computer';
+      resetGame();
+    });
+  });
 
   function handleCellClick(e) {
     const cell = e.target;
     const index = parseInt(cell.dataset.index);
 
     if (board[index] === '' && gameActive) {
-      board[index] = player;
-      cell.textContent = player;
-      cell.classList.add(player);
+      board[index] = currentPlayer;
+      cell.textContent = currentPlayer;
+      cell.classList.add(currentPlayer);
 
-      if (checkWin(player)) {
-        message.textContent = `${player} wins!`;
+      if (checkWin(currentPlayer)) {
+        message.textContent = `${currentPlayer} wins!`;
         gameActive = false;
       } else if (isBoardFull()) {
         message.textContent = "It's a draw!";
         gameActive = false;
       } else {
-        computerMove();
+        if (playWithComputer && currentPlayer === player) {
+          computerMove();
+        } else {
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          message.textContent = `Player ${currentPlayer}'s turn`;
+        }
       }
     }
   }
@@ -107,10 +134,14 @@
     } else if (isBoardFull()) {
       message.textContent = "It's a draw!";
       gameActive = false;
+    } else {
+      currentPlayer = player;
+      message.textContent = `Your turn`;
     }
   }
 
   function getBestMove(currentBoard, currentPlayer) {
+    // ... (Minimax algorithm code from previous responses) ...
     let availableMoves = [];
     for (let i = 0; i < currentBoard.length; i++) {
       if (currentBoard[i] === '') {
@@ -136,6 +167,7 @@
   }
 
   function minimax(currentBoard, depth, isMaximizing) {
+    // ... (Minimax algorithm code from previous responses) ...
     if (checkWin(player, currentBoard)) return -1;
     if (checkWin(computer, currentBoard)) return 1;
     if (isBoardFull(currentBoard)) return 0;
@@ -166,6 +198,7 @@
   }
 
   function checkWin(symbol, currentBoard = board) {
+    // ... (Win check code from previous responses) ...
     const winPatterns = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8],
       [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -179,23 +212,23 @@
   }
 
   function isBoardFull(currentBoard = board) {
+    // ... (Board full check code from previous responses) ...
     return currentBoard.every(cell => cell !== '');
   }
 
   function resetGame() {
     board = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = player;
     gameActive = true;
-    message.textContent = '';
+    message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
     cells.forEach(cell => {
       cell.textContent = '';
       cell.classList.remove(player, computer);
     });
-    message.textContent = "Your turn";
   }
 
   cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-  message.textContent = "Your turn";
-
+  message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
 </script>
 
 </body>
