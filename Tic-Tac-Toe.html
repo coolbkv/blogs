@@ -13,7 +13,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    margin: 20px auto; /* Center the board */
+    margin: 20px; /* Center the board */
   }
 
   .cell {
@@ -45,7 +45,7 @@
 </header>
 
 <h2>Tic-Tac-Toe</h2>
-<div id="board" w3-left">
+<div id="board">
   <div class="cell" data-row="0" data-col="0" onclick="makeMove(0, 0)"></div>
   <div class="cell" data-row="0" data-col="1" onclick="makeMove(0, 1)"></div>
   <div class="cell" data-row="0" data-col="2" onclick="makeMove(0, 2)"></div>
