@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
 <title>Tic-Tac-Toe</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<p><a href="index.html">Home</a></p>
-<div class="mode-select">
-  <label><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
-  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
+<body class="w3-display-container w3-content w3-center">
+  
+<p><a href="index.html" class="w3-button w3-blue">Home</a></p>
+
+<div class="mode-select w3-margin-bottom">
+  <label class="w3-margin-right"><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
+  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
 </div>
-<div class="board" id="board">
-  <div class="cell" data-index="0"></div>
-  <div class="cell" data-index="1"></div>
-  <div class="cell" data-index="2"></div>
-  <div class="cell" data-index="3"></div>
-  <div class="cell" data-index="4"></div>
-  <div class="cell" data-index="5"></div>
-  <div class="cell" data-index="6"></div>
-  <div class="cell" data-index="7"></div>
-  <div class="cell" data-index="8"></div>
+
+<div class="w3-row w3-center">
+  <div class="w3-col s12 m6 l4 w3-center" style="margin: 20px auto;">
+    <div class="w3-container" id="board" style="display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px;">
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="0" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="1" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="2" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="3" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="4" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="5" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="6" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="7" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+      <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="8" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+    </div>
+  </div>
 </div>
-<div id="message"></div>
-<button onclick="resetGame()">Reset Game</button>
+
+<div id="message" class="w3-center w3-large w3-margin-top"></div>
+<button onclick="resetGame()" class="w3-button w3-green w3-margin-top">Reset Game</button>
 <script>
   const cells = document.querySelectorAll('.cell');
   const message = document.getElementById('message');
@@ -170,5 +174,4 @@
     document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
  </script>
 </body>
-
 </html>
