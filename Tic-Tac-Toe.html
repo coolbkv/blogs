@@ -37,14 +37,10 @@
 </style>
 </head>
 <body>
-<header class="w3-bar w3-black">
-    <a href="index.html" class="w3-bar-item w3-button">Home</a>
-    <a href="blogs.html" class="w3-bar-item w3-button">Blogs</a>
-    <a href="index.html" class="w3-bar-item w3-button">Game</a>
-</header>
-<h2>Tic-Tac-Toe</h2>
+<div id="header-container"></div>
 
-<div id="board">
+<h2>Tic-Tac-Toe</h2>
+<div id="board"  class="w3-container w3-left">
   <div class="cell" data-row="0" data-col="0" onclick="makeMove(0, 0)"></div>
   <div class="cell" data-row="0" data-col="1" onclick="makeMove(0, 1)"></div>
   <div class="cell" data-row="0" data-col="2" onclick="makeMove(0, 2)"></div>
