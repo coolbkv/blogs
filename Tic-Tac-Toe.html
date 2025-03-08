@@ -1,160 +1,174 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
 <title>Tic-Tac-Toe</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body class="w3-display-container w3-content w3-center">
-
-<p><a href="index.html" class="w3-button w3-blue">Home</a></p>
-
-<div class="mode-select w3-margin-bottom">
-  <label><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
-  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
+<body>
+<p><a href="index.html">Home</a></p>
+<div class="mode-select">
+  <label><input type="radio" name="mode" value="computer" checked> Play vs Computer</label>
+  <label><input type="radio" name="mode" value="human"> Play vs Human</label>
 </div>
-
-<div class="board w3-container w3-center" id="board" style="display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px; margin: 20px auto; width: 315px; max-width: 90%;">
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="0" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="1" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="2" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="3" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="4" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="5" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="6" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="7" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
-  <div class="cell w3-border w3-border-black w3-display-container w3-center" data-index="8" style="width: 100px; height: 100px; font-size: 3em; cursor: pointer;"></div>
+<div class="board" id="board">
+  <div class="cell" data-index="0"></div>
+  <div class="cell" data-index="1"></div>
+  <div class="cell" data-index="2"></div>
+  <div class="cell" data-index="3"></div>
+  <div class="cell" data-index="4"></div>
+  <div class="cell" data-index="5"></div>
+  <div class="cell" data-index="6"></div>
+  <div class="cell" data-index="7"></div>
+  <div class="cell" data-index="8"></div>
 </div>
-
-<div id="message" class="w3-center w3-large w3-margin-top"></div>
-<button onclick="resetGame()" class="w3-button w3-green w3-margin-top">Reset Game</button>
-
+<div id="message"></div>
+<button onclick="resetGame()">Reset Game</button>
 <script>
-  const cells = document.querySelectorAll('.cell');
-  const message = document.getElementById('message');
-  const modeRadios = document.querySelectorAll('input[name="mode"]');
-  let board = ['', '', '', '', '', '', '', '', ''];
-  let player = 'X';
-  let currentPlayer = player;
-  let computer = 'O';
-  let gameActive = true;
-  let playWithComputer = true;
+  const cells = document.querySelectorAll('.cell');
+  const message = document.getElementById('message');
+  const modeRadios = document.querySelectorAll('input[name="mode"]');
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let player = 'X';
+  let currentPlayer = player;
+  let computer = 'O';
+  let gameActive = true;
+  let playWithComputer = true;
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      playWithComputer = radio.value === 'computer';
+      resetGame();
+    });
+  });
+  function handleCellClick(e) {
+    const cell = e.target;
+    const index = parseInt(cell.dataset.index);
+    if (board[index] === '' && gameActive) {
+      board[index] = currentPlayer;
+      cell.textContent = currentPlayer;
+      cell.classList.add(currentPlayer);
+      if (checkWin(currentPlayer)) {
+        message.textContent = `${currentPlayer} wins!`;
+        gameActive = false;
+      } else if (isBoardFull()) {
+        message.textContent = "It's a draw!";
+        gameActive = false;
+      } else {
+        if (playWithComputer && currentPlayer === player) {
+          computerMove();
+        } else {
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          message.textContent = `Player ${currentPlayer}'s turn`;
+        }
+      }
+    }
+  }
+  function computerMove() {
+    if (!gameActive) return;
+    let bestMove = getBestMove(board, computer);
+    board[bestMove] = computer;
+    cells[bestMove].textContent = computer;
+    cells[bestMove].classList.add(computer);
+    if (checkWin(computer)) {
+      message.textContent = `${computer} wins!`;
+      gameActive = false;
+    } else if (isBoardFull()) {
+      message.textContent = "It's a draw!";
+      gameActive = false;
+    } else {
+      currentPlayer = player;
+      message.textContent = `Your turn`;
+    }
+  }
+  function getBestMove(currentBoard, currentPlayer) {
+    // ... (Minimax algorithm code from previous responses) ...
+    let availableMoves = [];
+    for (let i = 0; i < currentBoard.length; i++) {
+      if (currentBoard[i] === '') {
+        availableMoves.push(i);
+      }
+    }
+    let bestMove = -1;
+    let bestScore = -Infinity;
+    for (let i = 0; i < availableMoves.length; i++) {
+      let tempBoard = [...currentBoard];
+      tempBoard[availableMoves[i]] = currentPlayer;
+      let score = minimax(tempBoard, 0, false);
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = availableMoves[i];
+      }
+    }
+    return bestMove;
+  }
+  function minimax(currentBoard, depth, isMaximizing) {
+    // ... (Minimax algorithm code from previous responses) ...
+    if (checkWin(player, currentBoard)) return -1;
+    if (checkWin(computer, currentBoard)) return 1;
+    if (isBoardFull(currentBoard)) return 0;
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[i] === '') {
+          let tempBoard = [...currentBoard];
+          tempBoard[i] = computer;
+          let score = minimax(tempBoard, depth + 1, false);
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[i] === '') {
+          let tempBoard = [...currentBoard];
+          tempBoard[i] = player;
+          let score = minimax(tempBoard, depth + 1, true);
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  }
+  function checkWin(symbol, currentBoard = board) {
+    // ... (Win check code from previous responses) ...
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    return winPatterns.some(pattern => {
+      const [a, b, c] = pattern;
+      return currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c] && currentBoard[a] === symbol;
+    });
+  }
+  function isBoardFull(currentBoard = board) {
+    // ... (Board full check code from previous responses) ...
+    return currentBoard.every(cell => cell !== '');
+  }
+  function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = player;
+    gameActive = true;
+    message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
+    cells.forEach(cell => {
+      cell.textContent = '';
+      cell.classList.remove(player, computer);
+    });
+  }
+  cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+  message.textContent = playWithComputer ? "Your turn" : `Player ${currentPlayer}'s turn`;
+</script>
+<footer>
+    &copy; <span id="copyrightYear"></span> Brajesh Kumar
+</footer>
+<script>
+    document.getElementById("copyrightYear").innerHTML = new Date().getFullYear();
+ </script>
+</body>
 
-  modeRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      playWithComputer = radio.value === 'computer';
-      resetGame();
-    });
-  });
-
-  function handleCellClick(e) {
-    const cell = e.target;
-    const index = parseInt(cell.dataset.index);
-
-    if (board[index] === '' && gameActive) {
-      board[index] = currentPlayer;
-      cell.textContent = currentPlayer;
-      cell.classList.add(currentPlayer);
-
-      if (checkWin(currentPlayer)) {
-        message.textContent = `${currentPlayer} wins!`;
-        gameActive = false;
-      } else if (isBoardFull()) {
-        message.textContent = "It's a draw!";
-        gameActive = false;
-      } else {
-        if (playWithComputer && currentPlayer === player) {
-          computerMove();
-        } else {
-          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-          message.textContent = `Player ${currentPlayer}'s turn`;
-        }
-      }
-    }
-  }
-
-  function computerMove() {
-    if (!gameActive) return;
-
-    let bestMove = getBestMove(board, computer);
-    board[bestMove] = computer;
-    cells[bestMove].textContent = computer;
-    cells[bestMove].classList.add(computer);
-
-    if (checkWin(computer)) {
-      message.textContent = `${computer} wins!`;
-      gameActive = false;
-    } else if (isBoardFull()) {
-      message.textContent = "It's a draw!";
-      gameActive = false;
-    } else {
-      currentPlayer = player;
-      message.textContent = `Your turn`;
-    }
-  }
-
-  function getBestMove(currentBoard, currentPlayer) {
-    let availableMoves = [];
-    for (let i = 0; i < currentBoard.length; i++) {
-      if (currentBoard[i] === '') {
-        availableMoves.push(i);
-      }
-    }
-
-    let bestMove = -1;
-    let bestScore = -Infinity;
-
-    for (let i = 0; i < availableMoves.length; i++) {
-      let tempBoard = [...currentBoard];
-      tempBoard[availableMoves[i]] = currentPlayer;
-      let score = minimax(tempBoard, 0, false);
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = availableMoves[i];
-      }
-    }
-
-    return bestMove;
-  }
-
-  function minimax(currentBoard, depth, isMaximizing) {
-    if (checkWin(player, currentBoard)) return -1;
-    if (checkWin(computer, currentBoard)) return 1;
-    if (isBoardFull(currentBoard)) return 0;
-
-    if (isMaximizing) {
-      let bestScore = -Infinity;
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[i] === '') {
-          let tempBoard = [...currentBoard];
-          tempBoard[i] = computer;
-          let score = minimax(tempBoard, depth + 1, false);
-          bestScore = Math.max(score, bestScore);
-        }
-      }
-      return bestScore;
-    } else {
-      let bestScore = Infinity;
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[i] === '') {
-          let tempBoard = [...currentBoard];
-          tempBoard[i] = player;
-          let score = minimax(tempBoard, depth + 1, true);
-          bestScore = Math.min(score, bestScore);
-        }
-      }
-      return bestScore;
-    }
-  }
-
-  function checkWin(symbol, currentBoard = board) {
-    const winPatterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-
-    return winPatterns.some(pattern => {
-      const [a, b, c] = pattern;
-      return currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c] && currentBoard
+</html>
